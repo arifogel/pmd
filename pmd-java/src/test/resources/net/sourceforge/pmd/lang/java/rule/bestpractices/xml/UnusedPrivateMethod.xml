@@ -3,6 +3,7 @@
     xmlns="http://pmd.sourceforge.net/rule-tests"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests http://pmd.sourceforge.net/rule-tests_1_0_0.xsd">
+    <!-- 
     <test-code>
         <description><![CDATA[
 private method called by public method
@@ -1600,6 +1601,29 @@ public class Foo {
 public class Foo {
     @Deprecated
     private void foo() {}
+}
+        ]]></code>
+    </test-code>
+-->
+    <test-code>
+        <description>#1189 Recognize private method call from inner class via external class</description>
+        <expected-problems>0</expected-problems>
+        <code><![CDATA[
+public final class OuterClass {
+    public static class InnerClass {
+        public void callPrivateMethod() {
+            Referrer.getOuterClass().privateMethod();
+        }
+    }
+
+    public static class Referrer {
+        public static OuterClass getOuterClass() {
+            return new OuterClass();
+        }
+    }
+
+    private void privateMethod() {
+    }
 }
         ]]></code>
     </test-code>
